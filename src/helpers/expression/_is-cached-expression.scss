@@ -1,0 +1,3 @@
+@function is-cached-expression($expression) {
+  @return map-has-key($cached-expressions, $expression);
+}

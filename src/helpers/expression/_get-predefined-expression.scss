@@ -1,0 +1,3 @@
+@function get-predefined-expression($expression) {
+  @return map-get($predefined-expressions, $expression);
+}

@@ -1,0 +1,11 @@
+@function set-cached-expression($key, $value) {
+  $cached-expressions-item: (
+    $key: $value,
+  );
+  $cached-expressions: map-merge(
+    $cached-expressions,
+    $cached-expressions-item
+  ) !global;
+
+  @return get-cached-expression($key);
+}

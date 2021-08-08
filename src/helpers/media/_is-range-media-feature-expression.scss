@@ -1,0 +1,20 @@
+@function is-range-media-expression($maybe-range-media-expression) {
+  @if length($maybe-range-media-expression) ==
+    3 and
+    is-comparison-operator(nth($maybe-range-media-expression, 2)) and
+    (
+      is-range-media-feature-name(nth($maybe-range-media-expression, 1)) and
+        type-of(nth($maybe-range-media-expression, 3)) ==
+        "number"
+    ) or
+    (
+      type-of(nth($maybe-range-media-expression, 1)) ==
+        "number" and
+        is-range-media-feature-name(nth($maybe-range-media-expression, 3))
+    )
+  {
+    @return true;
+  }
+
+  @return false;
+}

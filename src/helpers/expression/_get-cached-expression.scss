@@ -1,0 +1,3 @@
+@function get-cached-expression($expression) {
+  @return map-get($cached-expressions, $expression);
+}

@@ -1,0 +1,3 @@
+@function is-gt-operator($maybe-gt-operator) {
+  @return index($gt-operator, $maybe-gt-operator) != null;
+}

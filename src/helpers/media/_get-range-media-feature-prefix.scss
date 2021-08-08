@@ -1,0 +1,13 @@
+@function get-range-media-feature-prefix($comparison-operator) {
+  @if not is-comparison-operator($comparison-operator) {
+    @error '"#{$comparison-operator}" is not valid comparison operator';
+  }
+
+  @if is-max-constraint-operator($comparison-operator) {
+    @return "max-";
+  } @else if is-min-constraint-operator($comparison-operator) {
+    @return "min-";
+  }
+
+  @return "";
+}

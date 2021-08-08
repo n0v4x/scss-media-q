@@ -1,0 +1,3 @@
+@function is-eq-operator($maybe-eq-operator) {
+  @return index($eq-operator, $maybe-eq-operator) != null;
+}

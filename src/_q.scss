@@ -1,0 +1,30 @@
+@function q($expression) {
+  $query: null;
+
+  @if length($expression) < 1 or length($expression) > 3 {
+    @error unquote("not valid expression");
+  }
+
+  @if is-cached-expression($expression) {
+    $query: get-cached-expression($expression);
+  } @else {
+    @if length($expression) == 1 {
+      @if is-predefined-expression($expression) {
+        $predefined-expression: get-predefined-expression($expression);
+        $query: q($predefined-expression);
+      } @else {
+        @if type-of($expression) == "number" {
+          $query: q($default-media-feature $expression);
+        } @else {
+          $query: $expression;
+        }
+      }
+    } @else {
+      $query: to-media-feature($expression);
+    }
+
+    $query: set-cached-expression($expression, $query);
+  }
+
+  @return $query;
+}

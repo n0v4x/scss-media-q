@@ -1,0 +1,16 @@
+@function normalize-range-media-feature-value(
+  $media-feature-value,
+  $comparison-operator
+) {
+  @if not is-range-media-feature-value($media-feature-value) {
+    @error unquote("\"#{$media-feature-value}\" is not valid range media feature value");
+  }
+
+  @if is-gt-operator($comparison-operator) {
+    $media-feature-value: $media-feature-value + 1;
+  } @else if is-lt-operator($comparison-operator) {
+    $media-feature-value: $media-feature-value - 1;
+  }
+
+  @return $media-feature-value;
+}

@@ -1,0 +1,29 @@
+@import "./functions/";
+@import "./config";
+@import "./helpers/";
+@import "./q";
+
+// @debug $cached-expressions;
+
+// $test: q(width "<" 768px);
+
+// @debug $cached-expressions;
+
+// $test: q(width);
+
+// $test-map: (
+//   "a": 1,
+// );
+// @debug map;
+
+$predefined-expressions: (
+  sm: 768px,
+);
+
+@media #{q(770px)} {
+  .test {
+    lol: 2;
+  }
+}
+
+@debug $cached-expressions;

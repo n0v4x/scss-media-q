@@ -1,0 +1,316 @@
+@function px-to-em($pixels, $context: $font-size-base) {
+  @return math.div($pixels, $context) * 1em;
+}
+
+@function flat($list) {
+  $result: ();
+  $separator: list-separator($list);
+
+  @each $list-item in $list {
+    @if type-of($list-item) == "list" {
+      $result: join($result, $list-item, $separator);
+    } @else {
+      $result: append($result, $list-item, $separator);
+    }
+  }
+
+  @return $result;
+}
+
+@function last($list) {
+  $last-index: length($list);
+
+  @if $last-index < 1 {
+    @return null;
+  }
+
+  @return nth($list, $last-index);
+}
+
+@function remove-last($list) {
+  $result: ();
+  $separator: list-separator($list);
+
+  @if length($list) > 1 {
+    @for $i from 1 through length($list) - 1 {
+      $result: append($result, nth($list, $i), $separator);
+    }
+  }
+
+  @return $result;
+}
+
+@function reverse($list) {
+  $result: ();
+  $list-length: length($list);
+  $separator: list-separator($list);
+
+  @if $list-length > 1 {
+    @for $i from $list-length through 1 {
+      $result: append($result, nth($list, $i), $separator);
+    }
+  } @else {
+    $result: $list;
+  }
+
+  @return $result;
+}
+
+$font-size-base: 16px !default;
+
+/* operators */
+$lt-operator: "<" !default;
+$gt-operator: ">" !default;
+$ge-operator: ">=" !default;
+$le-operator: "<=" !default;
+$eq-operator: "==" !default;
+
+$comparison-operators: flat(
+  ($lt-operator, $gt-operator, $ge-operator, $le-operator, $eq-operator)
+);
+
+/* media features */
+$range-media-features-names: ("width", "height", "resolution");
+
+$default-media-feature: "min-width" !default;
+
+$predefined-expressions: (
+  sm: width "<=" 414px,
+  xl: 768px,
+) !default;
+
+$cached-expressions: ();
+
+@function get-cached-expression($expression) {
+  @return map-get($cached-expressions, $expression);
+}
+
+@function get-predefined-expression($expression) {
+  @return map-get($predefined-expressions, $expression);
+}
+
+@function is-cached-expression($expression) {
+  @return map-has-key($cached-expressions, $expression);
+}
+
+@function is-predefined-expression($expression) {
+  @return map-has-key($predefined-expressions, $expression);
+}
+
+@function set-cached-expression($key, $value) {
+  $cached-expressions-item: (
+    $key: $value,
+  );
+  $cached-expressions: map-merge(
+    $cached-expressions,
+    $cached-expressions-item
+  ) !global;
+
+  @return get-cached-expression($key);
+}
+
+@function get-range-media-feature-prefix($comparison-operator) {
+  @if not is-comparison-operator($comparison-operator) {
+    @error '"#{$comparison-operator}" is not valid comparison operator';
+  }
+
+  @if is-max-constraint-operator($comparison-operator) {
+    @return "max-";
+  } @else if is-min-constraint-operator($comparison-operator) {
+    @return "min-";
+  }
+
+  @return "";
+}
+
+@function is-plain-media-feature-expression($expression) {
+  @return length($expression) == 2 or
+    (length($expression) == 3 and is-eq-operator(nth($expression, 2)));
+}
+
+@function is-range-media-expression($maybe-range-media-expression) {
+  @if length($maybe-range-media-expression) ==
+    3 and
+    is-comparison-operator(nth($maybe-range-media-expression, 2)) and
+    (
+      is-range-media-feature-name(nth($maybe-range-media-expression, 1)) and
+        type-of(nth($maybe-range-media-expression, 3)) ==
+        "number"
+    ) or
+    (
+      type-of(nth($maybe-range-media-expression, 1)) ==
+        "number" and
+        is-range-media-feature-name(nth($maybe-range-media-expression, 3))
+    )
+  {
+    @return true;
+  }
+
+  @return false;
+}
+
+@function is-range-media-feature-name($maybe-range-media-feature-name) {
+  @return index($range-media-features-names, $maybe-range-media-feature-name) !=
+    null;
+}
+
+@function is-range-media-feature-value($maybe-range-media-feature-value) {
+  @return index("" "px", unit($maybe-range-media-feature-value));
+}
+
+@function normalize-range-media-feature-name(
+  $media-feature-name,
+  $comparison-operator
+) {
+  $media-feature-prefix: get-range-media-feature-prefix($comparison-operator);
+
+  @return "#{$media-feature-prefix}#{$media-feature-name}";
+}
+
+@function normalize-range-media-feature-value(
+  $media-feature-value,
+  $comparison-operator,
+  $convert-px-to-em: null
+) {
+  @if is-gt-operator($comparison-operator) {
+    $media-feature-value: $media-feature-value + 1;
+  } @else if is-lt-operator($comparison-operator) {
+    $media-feature-value: $media-feature-value - 1;
+  }
+
+  @if $convert-px-to-em and index("" "px", unit($media-feature-value)) {
+    $media-feature-value: px-to-em($media-feature-value);
+  }
+
+  @return $media-feature-value;
+}
+
+@function to-media-feature-string(
+  $media-feature-name,
+  $media-feature-value: null
+) {
+  $inner: if(
+    $media-feature-value,
+    "#{$media-feature-name}: #{$media-feature-value}",
+    $media-feature-name
+  );
+
+  @return "(#{$inner})";
+}
+
+@function to-media-feature($expression) {
+  @if is-plain-media-feature-expression($expression) {
+    @return to-plain-media-feature($expression);
+  } @else if is-range-media-feature-expression($expression) {
+    @return to-range-media-feature($expression);
+  }
+
+  @error unquote("\"#{$expression}\" not valid expression");
+}
+
+@function to-plain-media-feature($expression) {
+  // @if not is-plain-media-feature-expression($expression) {
+  //   @error "$expression is not valid plain media feature";
+  // }
+
+  $media-feature-name: nth($expression, 1);
+  $media-feature-value: nth($expression, length($expression));
+
+  @return to-media-feature-string($media-feature-name, $media-feature-value);
+}
+
+@function to-range-media-feature($expression) {
+  $media-feature-name: nth($expression, 1);
+  $media-feature-value: nth($expression, 3);
+  $operator: nth($expression, 2);
+
+  @if is-range-media-feature-name($media-feature-value) and
+    is-range-media-feature-value($media-feature-name)
+  {
+    $temp: $media-feature-name;
+    $media-feature-name: $media-feature-value;
+    $media-feature-value: $temp;
+  }
+
+  @if not is-range-media-feature-name($media-feature-name) {
+    @error unquote("\"#{$media-feature-name}\" is not valid range media feature name");
+  }
+
+  @if not is-range-media-feature-value($media-feature-value) {
+    @error unquote("\"#{$media-feature-value}\" is not valid range media feature value");
+  }
+
+  $media-feature-name: normalize-range-media-feature-name(
+    $media-feature-name,
+    $operator
+  );
+  $media-feature-value: normalize-range-media-feature-value(
+    $media-feature-value,
+    $operator
+  );
+
+  @return to-media-feature-string($media-feature-name, $media-feature-value);
+}
+
+@function is-comparison-operator($maybe-comparison-operator) {
+  @return index($comparison-operators, $maybe-comparison-operator) != null;
+}
+
+@function is-eq-operator($maybe-eq-operator) {
+  @return index($eq-operator, $maybe-eq-operator) != null;
+}
+
+@function is-ge-operator($maybe-ge-operator) {
+  @return index($ge-operator, $maybe-ge-operator) != null;
+}
+
+@function is-gt-operator($maybe-gt-operator) {
+  @return index($gt-operator, $maybe-gt-operator) != null;
+}
+
+@function is-le-operator($maybe-le-operator) {
+  @return index($le-operator, $maybe-le-operator) != null;
+}
+
+@function is-lt-operator($maybe-lt-operator) {
+  @return index($lt-operator, $maybe-lt-operator) != null;
+}
+
+@function is-max-constraint-operator($operator) {
+  @return is-lt-operator($operator) or is-le-operator($operator);
+}
+
+@function is-min-constraint-operator($operator) {
+  @return is-gt-operator($operator) or is-ge-operator($operator);
+}
+
+@function q($expression) {
+  $query: null;
+
+  @if length($expression) < 1 or length($expression) > 3 {
+    @error unquote("not valid expression");
+  }
+
+  @if is-cached-expression($expression) {
+    $query: get-cached-expression($expression);
+  } @else {
+    @if length($expression) == 1 {
+      @if is-predefined-expression($expression) {
+        $predefined-expression: get-predefined-expression($expression);
+        $query: q($predefined-expression);
+      } @else {
+        @if type-of($expression) == "number" {
+          $query: to-media-feature-string($default-media-feature, $expression);
+        } @else {
+          $query: $expression;
+        }
+      }
+    } @else {
+      $query: to-media-feature($expression);
+    }
+
+    $query: set-cached-expression($expression, $query);
+  }
+
+  @return $query;
+}

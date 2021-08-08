@@ -1,0 +1,9 @@
+@function to-media-feature($expression) {
+  @if is-plain-media-feature-expression($expression) {
+    @return to-plain-media-feature($expression);
+  } @else if is-range-media-feature-expression($expression) {
+    @return to-range-media-feature($expression);
+  }
+
+  @error unquote("\"#{$expression}\" not valid expression");
+}

@@ -1,0 +1,3 @@
+@function is-predefined-expression($expression) {
+  @return map-has-key($predefined-expressions, $expression);
+}

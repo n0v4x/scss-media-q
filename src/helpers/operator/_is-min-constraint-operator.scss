@@ -1,0 +1,3 @@
+@function is-min-constraint-operator($operator) {
+  @return is-gt-operator($operator) or is-ge-operator($operator);
+}

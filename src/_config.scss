@@ -1,0 +1,19 @@
+$font-size-base: 16px !default;
+
+$lt-operator: "<" !default;
+$gt-operator: ">" !default;
+$ge-operator: ">=" !default;
+$le-operator: "<=" !default;
+$eq-operator: "==" !default;
+
+$comparison-operators: flat(
+  ($lt-operator, $gt-operator, $ge-operator, $le-operator, $eq-operator)
+);
+
+$range-media-features-names: ("width", "height", "resolution");
+
+$default-media-feature: "min-width" !default;
+$predefined-expressions: () !default;
+$convert-px-to-em: false !default;
+
+$cached-expressions: ();

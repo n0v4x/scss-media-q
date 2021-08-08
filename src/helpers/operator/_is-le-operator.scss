@@ -1,0 +1,3 @@
+@function is-le-operator($maybe-le-operator) {
+  @return index($le-operator, $maybe-le-operator) != null;
+}

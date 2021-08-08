@@ -1,0 +1,4 @@
+@function is-range-media-feature-name($maybe-range-media-feature-name) {
+  @return index($range-media-features-names, $maybe-range-media-feature-name) !=
+    null;
+}

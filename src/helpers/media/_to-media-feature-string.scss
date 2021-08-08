@@ -1,0 +1,12 @@
+@function to-media-feature-string(
+  $media-feature-name,
+  $media-feature-value: null
+) {
+  $inner: if(
+    $media-feature-value,
+    "#{$media-feature-name}: #{$media-feature-value}",
+    $media-feature-name
+  );
+
+  @return "(#{$inner})";
+}

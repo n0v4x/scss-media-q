@@ -1,0 +1,3 @@
+@function is-comparison-operator($maybe-comparison-operator) {
+  @return index($comparison-operators, $maybe-comparison-operator) != null;
+}
