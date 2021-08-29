@@ -26,12 +26,16 @@ const build = () => {
     "src/_q.scss",
     "!src/**/_.scss",
   ])
-    .pipe(concat("media-q.scss"))
+    .pipe(concat("scss-media-q.scss"))
     .pipe(dest("build"));
 };
 
 const cleanTask = () => {
   return del("output");
+};
+
+const cleanBuild = () => {
+  return del("build");
 };
 
 const sassTask = () => {
@@ -51,5 +55,5 @@ const doc = () => {
 
 exports.doc = doc;
 exports.tests = tests;
-exports.build = series(tests, build, doc);
+exports.build = series(tests, cleanBuild, build);
 exports.default = series(cleanTask, sassTask, watchTask);
