@@ -1,3 +1,3 @@
 @function is-ge-operator($maybe-ge-operator) {
-  @return index($ge-operator, $maybe-ge-operator) != null;
+  @return index($GE_OP, $maybe-ge-operator) != null;
 }

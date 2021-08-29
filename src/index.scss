@@ -16,14 +16,12 @@
 // );
 // @debug map;
 
-$predefined-expressions: (
+$PREDEFINED_EXPRESSIONS: (
   sm: 768px,
 );
 
-@media #{q(770px)} {
+@media #{q(sm)} {
   .test {
     lol: 2;
   }
 }
-
-@debug $cached-expressions;

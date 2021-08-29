@@ -1,19 +1,19 @@
-$font-size-base: 16px !default;
+$FONT_SIZE_BASE: 16px !default;
 
-$lt-operator: "<" !default;
-$gt-operator: ">" !default;
-$ge-operator: ">=" !default;
-$le-operator: "<=" !default;
-$eq-operator: "==" !default;
+$LT_OP: "<", "lt";
+$GT_OP: ">", "gt";
+$GE_OP: ">=", "ge";
+$LE_OP: "<=", "le";
+$EQ_OP: "==", "eq";
 
-$comparison-operators: flat(
-  ($lt-operator, $gt-operator, $ge-operator, $le-operator, $eq-operator)
-);
+$COMPARISON_OPERATORS: flat(($LT_OP, $GT_OP, $GE_OP, $LE_OP, $EQ_OP));
 
-$range-media-features-names: ("width", "height", "resolution");
+$RANGE_MEDIA_FEATURES: ("width", "height", "resolution");
 
-$default-media-feature: "min-width" !default;
-$predefined-expressions: () !default;
-$convert-px-to-em: false !default;
+$DEFAULT_RANGE_MEDIA_FEATURE: "width" !default;
+$DEFAULT_MEDIA_FEATURE: "min-width" !default;
 
-$cached-expressions: ();
+$PREDEFINED_EXPRESSIONS: () !default;
+$CONVERT_PX_TO_EM: false !default;
+
+$CACHED_QUERIES: ();

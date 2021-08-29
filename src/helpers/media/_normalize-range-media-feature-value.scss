@@ -2,7 +2,7 @@
   $media-feature-value,
   $comparison-operator
 ) {
-  @if not is-range-media-feature-value($media-feature-value) {
+  @if not is-valid-range-media-feature-value($media-feature-value) {
     @error unquote("\"#{$media-feature-value}\" is not valid range media feature value");
   }
 

@@ -1,0 +1,30 @@
+$PREDEFINED_EXPRESSIONS: (
+  sm: 768px,
+  tablet: width ">=" 768px,
+);
+
+$tests: (
+  (("min-width: 69px"), "(min-width: 69px)"),
+  ((69px), "(min-width: 69px)"),
+  ((69px "min-width"), "(min-width: 69px)"),
+  (("min-width" 69px), "(min-width: 69px)"),
+  ((">=" 69px), "(min-width: 69px)"),
+  ((69px ">="), "(min-width: 69px)"),
+  (("width" ">=" 69px), "(min-width: 69px)"),
+  ((69px ">=" "width"), "(min-width: 69px)"),
+  (("width" "<=" 69px), "(max-width: 69px)"),
+  ((69px "<=" "width"), "(max-width: 69px)"),
+  (("width" ">" 69px), "(min-width: 70px)"),
+  (("width" "<" 69px), "(max-width: 68px)"),
+  ((69px ">" "width"), "(min-width: 70px)"),
+  ((69px "<" "width"), "(max-width: 68px)"),
+  (("width" "==" 69px), "(width: 69px)"),
+  (("width" 69px), "(width: 69px)"),
+  ((69px "width"), "(width: 69px)"),
+  (("sm"), "(min-width: 768px)"),
+  (("tablet"), "(min-width: 768px)"),
+  (("hover" "hover"), "(hover: hover)"),
+  (("test" ">=" 69px), "(min-test: 69px)")
+);
+
+@include test-function("q", $tests);

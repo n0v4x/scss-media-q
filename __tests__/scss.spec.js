@@ -13,6 +13,6 @@ const glob = require("glob");
 //   sassTestFiles.forEach((file) => sassTrue.runSass({ file }, { describe, it }));
 // });
 
-// const sassFile = path.join(__dirname, "index.scss");
+const sassFile = path.join(__dirname, "index.scss");
 
-// sassTrue.runSass({ file: sassFile }, { describe, it });
+sassTrue.runSass({ file: sassFile }, { describe, it });

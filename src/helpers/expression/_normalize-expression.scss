@@ -1,0 +1,62 @@
+// normalize-expression(468px) => ("min-width" 468px);
+// normalize-expression("min-width" 468px) => ("min-width" 468px);
+// normalize-expression(468px "min-width") => ("min-width" 468px);
+// normalize-expression("min-width" "468px") => ("min-width" 468px);
+// normalize-expression("<=" 468px) => ("width" "<=" 468px);
+// normalize-expression(468px "<=") => ("width" "<=" 468px);
+// normalize-expression("width" "<=" 468px) => ("width" "<=" 468px);
+// normalize-expression(468px "<=" "width") => ("width" "<=" 468px);
+
+@function normalize-expression($expression) {
+  @if length($expression) == 1 {
+    @if type-of(nth($expression, 1)) == "number" {
+      @return ($DEFAULT_MEDIA_FEATURE nth($expression, 1));
+    }
+
+    @return $expression;
+  } @else if length($expression) == 2 {
+    $left-operand: nth($expression, 1);
+    $right-operand: nth($expression, 2);
+
+    @if type-of($left-operand) == "number" {
+      @if type-of($right-operand) == "number" {
+        @error unquote("Not valid expression");
+      }
+
+      $temp: $left-operand;
+      $left-operand: $right-operand;
+      $right-operand: $temp;
+    }
+
+    @if is-comparison-operator($left-operand) {
+      @if not is-valid-range-media-feature-value($right-operand) {
+        @error unquote("Not valid expression");
+      }
+
+      $operator: $left-operand;
+      $left-operand: $DEFAULT_RANGE_MEDIA_FEATURE;
+
+      @return ($left-operand $operator $right-operand);
+    } @else {
+      @return ($left-operand $right-operand);
+    }
+  } @else if length($expression) == 3 {
+    $left-operand: nth($expression, 1);
+    $operator: nth($expression, 2);
+    $right-operand: nth($expression, 3);
+
+    @if not is-comparison-operator($operator) {
+      @error unquote('Not valid operator: "#{$operator}"');
+    }
+
+    $normalized-expression: normalize-expression($left-operand $right-operand);
+    $left-operand: nth($normalized-expression, 1);
+    $right-operand: nth($normalized-expression, 2);
+
+    @return ($left-operand $operator $right-operand);
+  } @else {
+    @error "Not valid expression";
+  }
+
+  @return $normalized-expression;
+}

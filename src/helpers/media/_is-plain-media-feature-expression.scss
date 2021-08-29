@@ -1,4 +1,0 @@
-@function is-plain-media-feature-expression($expression) {
-  @return length($expression) == 2 or
-    (length($expression) == 3 and is-eq-operator(nth($expression, 2)));
-}

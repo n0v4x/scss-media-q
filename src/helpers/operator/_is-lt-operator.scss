@@ -1,3 +1,3 @@
 @function is-lt-operator($maybe-lt-operator) {
-  @return index($lt-operator, $maybe-lt-operator) != null;
+  @return index($LT_OP, $maybe-lt-operator) != null;
 }

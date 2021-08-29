@@ -1,0 +1,8 @@
+@function set-cached-query($key, $value) {
+  $CACHED_QUERIES-item: (
+    $key: $value,
+  );
+  $CACHED_QUERIES: map-merge($CACHED_QUERIES, $CACHED_QUERIES-item) !global;
+
+  @return get-cached-query($key);
+}

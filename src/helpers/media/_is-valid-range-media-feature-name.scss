@@ -1,0 +1,3 @@
+@function is-valid-range-media-feature-name($range-media-feature-name) {
+  @return index($RANGE_MEDIA_FEATURES, $range-media-feature-name) != null;
+}

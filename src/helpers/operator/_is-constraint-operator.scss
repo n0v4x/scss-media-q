@@ -1,0 +1,4 @@
+@function is-constraint-operator($operator) {
+  @return is-max-constraint-operator($operator) or
+    is-min-constraint-operator($operator);
+}

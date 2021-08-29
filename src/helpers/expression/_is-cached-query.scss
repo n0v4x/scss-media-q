@@ -1,0 +1,3 @@
+@function is-cached-query($key) {
+  @return map-has-key($CACHED_QUERIES, $key);
+}

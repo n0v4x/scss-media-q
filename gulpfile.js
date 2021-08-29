@@ -1,6 +1,5 @@
 const { src, series, parallel, dest, watch } = require("gulp");
 const gulpSass = require("gulp-sass")(require("sass"));
-const browserSync = require("browser-sync").create();
 const del = require("del");
 const jest = require("gulp-jest").default;
 const concat = require("gulp-concat");
@@ -9,7 +8,8 @@ const tests = () => {
   return src("__tests__").pipe(
     jest({
       preprocessorIgnorePatterns: [
-        "<rootDir>/dist/",
+        "<rootDir>/build/",
+        "<rootDir>/output/",
         "<rootDir>/node_modules/",
       ],
       automock: false,
@@ -30,39 +30,20 @@ const build = () => {
 };
 
 const cleanTask = () => {
-  return del("dist");
+  return del("output");
 };
 
 const sassTask = () => {
   return src("src/index.scss", { sourcemaps: true })
     .pipe(gulpSass())
-    .pipe(dest("output", { sourcemaps: "." }))
-    .pipe(browserSync.stream());
-};
-
-const serveTask = (cb) => {
-  browserSync.init({
-    server: {
-      baseDir: ".",
-    },
-    notify: false,
-  });
-
-  cb();
-};
-
-const reloadServerTask = (cb) => {
-  browserSync.reload();
-
-  cb();
+    .pipe(dest("output", { sourcemaps: "." }));
 };
 
 const watchTask = () => {
-  watch("index.html", reloadServerTask);
-  watch("src/**/*.scss", series(sassTask, reloadServerTask));
-  // watch("src/**/*.scss", series(tests, sassTask, reloadServerTask));
-  // watch("__tests__/**/*.scss", tests);
+  watch("src/**/*.scss", sassTask);
+  watch("__tests__/**/*.scss", tests);
 };
 
-exports.build = build;
-exports.default = series(cleanTask, sassTask, serveTask, watchTask);
+exports.tests = tests;
+exports.build = series(tests, build);
+exports.default = series(cleanTask, sassTask, watchTask);

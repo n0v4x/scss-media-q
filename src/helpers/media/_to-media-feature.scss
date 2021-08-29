@@ -1,9 +1,30 @@
-@function to-media-feature($expression) {
-  @if is-plain-media-feature-expression($expression) {
-    @return to-plain-media-feature($expression);
-  } @else if is-range-media-feature-expression($expression) {
-    @return to-range-media-feature($expression);
+@function to-media-feature($expression, $px-to-em: $CONVERT_PX_TO_EM) {
+  $expression-length: length($expression);
+
+  @if $expression-length < 1 or $expression-length > 3 {
+    @error unquote('Not valid length of the expression: #{$expression}');
   }
 
-  @error unquote("\"#{$expression}\" not valid expression");
+  $media-feature-name: nth($expression, 1);
+  $media-feature-value: null;
+
+  @if $expression-length == 2 {
+    $media-feature-value: nth($expression, 2);
+  } @else if $expression-length == 3 {
+    $operator: nth($expression, 2);
+    $media-feature-name: normalize-range-media-feature-name(
+      $media-feature-name,
+      $operator
+    );
+    $media-feature-value: normalize-range-media-feature-value(
+      nth($expression, 3),
+      $operator
+    );
+  }
+
+  @if $px-to-em and is-valid-range-media-feature-value($media-feature-value) {
+    $media-feature-value: px-to-em($media-feature-value);
+  }
+
+  @return to-media-feature-string($media-feature-name, $media-feature-value);
 }
