@@ -6,7 +6,7 @@
 
 1. Number as parameter
 
-Default config variable that helps define, which media feature will be used with number as parameter:
+Default config variable that helps define, which media feature will be used if number passed as parameter:
 
 ```scss
 $DEFAULT_MEDIA_FEATURE: "min-width" !default;
@@ -48,7 +48,7 @@ scss:
 
 4. Short expression (comparison operator and number)
 
-Default config variable that helps define which range media feature will be used with short expression:
+Default config variable that helps define which range media feature will be used if short expression passed as parameter:
 
 ```scss
 $DEFAULT_RANGE_MEDIA_FEATURE: "width" !default;
