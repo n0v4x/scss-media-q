@@ -2,26 +2,3 @@
 @import "./config";
 @import "./helpers/";
 @import "./q";
-
-// @debug $cached-expressions;
-
-// $test: q(width "<" 768px);
-
-// @debug $cached-expressions;
-
-// $test: q(width);
-
-// $test-map: (
-//   "a": 1,
-// );
-// @debug map;
-
-$PREDEFINED_EXPRESSIONS: (
-  sm: 768px,
-);
-
-@media #{q(sm)} {
-  .test {
-    lol: 2;
-  }
-}
