@@ -6,9 +6,13 @@
 
 1. Number as parameter
 
+Default config variable that helps define, which media feature will be used with number as parameter:
+
 ```scss
 $DEFAULT_MEDIA_FEATURE: "min-width" !default;
 ```
+
+scss:
 
 ```scss
 @media #{q(768px)} {
@@ -20,6 +24,8 @@ $DEFAULT_MEDIA_FEATURE: "min-width" !default;
 
 2. String as parameter
 
+scss:
+
 ```scss
 @media #{q("min-width: 768px")} {
   .debug {
@@ -29,6 +35,8 @@ $DEFAULT_MEDIA_FEATURE: "min-width" !default;
 ```
 
 3. Two parameters
+
+scss:
 
 ```scss
 @media #{q("min-width" 768px)} {
@@ -40,9 +48,13 @@ $DEFAULT_MEDIA_FEATURE: "min-width" !default;
 
 4. Short expression (comparison operator and number)
 
+Default config variable that helps define which range media feature will be used with short expression:
+
 ```scss
 $DEFAULT_RANGE_MEDIA_FEATURE: "width" !default;
 ```
+
+scss:
 
 ```scss
 @media #{q(">=" 768px)} {
@@ -64,6 +76,8 @@ or
 
 5. Expression (media feature, comparison operator and number)
 
+scss:
+
 ```scss
 @media #{q(width ">=" 768px)} {
   .debug {
@@ -73,6 +87,8 @@ or
 ```
 
 6. Predefined expressions
+
+scss:
 
 ```scss
 $PREDEFINED_EXPRESSIONS: (
@@ -110,7 +126,7 @@ $EQ_OP: "==", "eq";
 
 **Only px allowed with comparison operators!!!**
 
-1.
+1. Less than operator
 
 Next scss:
 
@@ -123,7 +139,7 @@ Next scss:
 }
 ```
 
-Will produce:
+Will produce following css:
 
 ```css
 @media (max-width: 767px) {
@@ -133,7 +149,7 @@ Will produce:
 }
 ```
 
-2.
+2. Greater than operator
 
 Next scss:
 
@@ -146,7 +162,7 @@ Next scss:
 }
 ```
 
-Will produce:
+Will produce following css:
 
 ```css
 @media (min-width: 769px) {
@@ -177,7 +193,7 @@ $CONVERT_PX_TO_EM: true;
 }
 ```
 
-Will produce:
+Will produce following css:
 
 ```css
 @media (min-width: 48em) {
