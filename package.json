@@ -1,17 +1,17 @@
 {
-  "name": "grid-system",
+  "name": "media-q",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "browser-sync": "^2.27.4",
     "del": "^6.0.0",
     "glob": "^7.1.7",
     "gulp": "^4.0.2",
     "gulp-jest": "^4.0.4",
     "gulp-sass": "^5.0.0",
     "jest": "^27.0.6",
-    "sass-true": "^6.0.1"
+    "sass-true": "^6.0.1",
+    "sassdoc": "^2.7.3"
   },
   "scripts": {
     "dev": "gulp",

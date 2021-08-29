@@ -3,6 +3,7 @@ const gulpSass = require("gulp-sass")(require("sass"));
 const del = require("del");
 const jest = require("gulp-jest").default;
 const concat = require("gulp-concat");
+const sassdoc = require("sassdoc");
 
 const tests = () => {
   return src("__tests__").pipe(
@@ -44,6 +45,11 @@ const watchTask = () => {
   watch("__tests__/**/*.scss", tests);
 };
 
+const doc = () => {
+  return src("src/**/*.scss").pipe(sassdoc());
+};
+
+exports.doc = doc;
 exports.tests = tests;
-exports.build = series(tests, build);
+exports.build = series(tests, build, doc);
 exports.default = series(cleanTask, sassTask, watchTask);
